@@ -5,173 +5,206 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Phase 2 Phonics Blender</title>
     <style>
-        :root {
-            --primary: #4A90E2;
-            --secondary: #F5A623;
-            --bg: #f0f4f8;
-            --wheel-bg: #ffffff;
-            --text-color: #333;
-            --glow-color: #00d2ff;
-        }
+    :root {
+        --primary: #4A90E2;
+        --secondary: #F5A623;
+        --bg: #f0f4f8;
+        --wheel-bg: #ffffff;
+        --text-color: #333;
+        --glow-color: #00d2ff;
+    }
 
-        body {
-            font-family: 'Comic Sans MS', 'Arial Rounded MT Bold', sans-serif;
-            background-color: var(--bg);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
+    body {
+        font-family: 'Comic Sans MS', 'Arial Rounded MT Bold', sans-serif;
+        background-color: var(--bg);
+        /* Changed to min-height to allow scrolling on small screens */
+        min-height: 100vh;
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        /* Add padding to prevent edges sticking to screen */
+        padding: 20px;
+        box-sizing: border-box;
+    }
 
+    .main-container {
+        display: flex;
+        gap: 40px;
+        background: white;
+        padding: 40px;
+        border-radius: 20px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        align-items: center;
+        /* Ensure it doesn't overflow the screen width */
+        max-width: 100%;
+        transition: all 0.3s ease;
+    }
+
+    /* Machine Layout */
+    .machine-section {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .wheels-container {
+        display: flex;
+        gap: 20px;
+    }
+
+    .wheel-unit {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .control-btn {
+        background-color: var(--primary);
+        color: white;
+        border: none;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        font-size: 24px;
+        cursor: pointer;
+        transition: transform 0.1s, background-color 0.2s;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        /* Prevent selection highlight */
+        user-select: none;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    .control-btn:active {
+        transform: scale(0.95);
+    }
+
+    .letter-display {
+        width: 100px;
+        height: 120px;
+        background: var(--wheel-bg);
+        border: 4px solid #333;
+        border-radius: 10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 80px;
+        font-weight: bold;
+        color: var(--text-color);
+        box-shadow: inset 0 0 20px rgba(0,0,0,0.1);
+        position: relative;
+        overflow: hidden;
+        transition: all 0.2s ease;
+        user-select: none;
+    }
+
+    .letter-display.glow {
+        border-color: var(--glow-color);
+        box-shadow: 0 0 25px var(--glow-color), inset 0 0 10px white;
+        background-color: #e6f7ff;
+        transform: scale(1.05);
+    }
+
+    .blend-btn {
+        background-color: var(--secondary);
+        color: white;
+        border: none;
+        padding: 15px 40px;
+        font-size: 24px;
+        border-radius: 50px;
+        cursor: pointer;
+        font-family: inherit;
+        font-weight: bold;
+        box-shadow: 0 5px 0 #d48806;
+        transition: transform 0.1s;
+        /* Prevent text selection */
+        user-select: none;
+    }
+
+    .blend-btn:active {
+        transform: translateY(3px);
+        box-shadow: 0 2px 0 #d48806;
+    }
+
+    .blend-btn:disabled {
+        background-color: #ccc;
+        box-shadow: none;
+        cursor: not-allowed;
+    }
+
+    /* Result Section */
+    .result-section {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 200px;
+        border-left: 2px dashed #ccc;
+        padding-left: 40px;
+    }
+
+    .result-box {
+        font-size: 100px;
+        color: var(--primary);
+        min-height: 120px;
+        font-weight: bold;
+        transition: all 0.3s ease;
+        padding: 10px;
+        border-radius: 10px;
+    }
+
+    .result-box.glow {
+        text-shadow: 0 0 20px var(--glow-color);
+        transform: scale(1.1);
+    }
+
+    .result-label {
+        font-size: 18px;
+        color: #888;
+        margin-top: 10px;
+    }
+
+    /* --- RESPONSIVE TABLET/MOBILE FIX --- */
+    @media (max-width: 800px) {
         .main-container {
-            display: flex;
-            gap: 40px;
-            background: white;
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            align-items: center;
-        }
-
-        /* Machine Layout */
-        .machine-section {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            flex-direction: column; /* Stack vertically */
+            padding: 20px;
             gap: 20px;
+            width: 90%; /* Fit width of tablet */
         }
 
-        .wheels-container {
-            display: flex;
-            gap: 20px;
-        }
-
-        .wheel-unit {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .control-btn {
-            background-color: var(--primary);
-            color: white;
-            border: none;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            font-size: 24px;
-            cursor: pointer;
-            transition: transform 0.1s, background-color 0.2s;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .control-btn:hover {
-            background-color: #357ABD;
-            transform: scale(1.1);
-        }
-
-        .control-btn:active {
-            transform: scale(0.95);
-        }
-
-        .letter-display {
-            width: 100px;
-            height: 120px;
-            background: var(--wheel-bg);
-            border: 4px solid #333;
-            border-radius: 10px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 80px;
-            font-weight: bold;
-            color: var(--text-color);
-            box-shadow: inset 0 0 20px rgba(0,0,0,0.1);
-            position: relative;
-            overflow: hidden;
-            transition: all 0.2s ease;
-        }
-
-        /* The Glow Effect Class */
-        .letter-display.glow {
-            border-color: var(--glow-color);
-            box-shadow: 0 0 25px var(--glow-color), inset 0 0 10px white;
-            background-color: #e6f7ff;
-            transform: scale(1.05);
-        }
-
-        /* Roulette Gradient Overlay */
-        .letter-display::after {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0) 20%, rgba(0,0,0,0) 80%, rgba(0,0,0,0.1) 100%);
-            pointer-events: none;
-        }
-
-        .blend-btn {
-            background-color: var(--secondary);
-            color: white;
-            border: none;
-            padding: 15px 40px;
-            font-size: 24px;
-            border-radius: 50px;
-            cursor: pointer;
-            font-family: inherit;
-            font-weight: bold;
-            box-shadow: 0 5px 0 #d48806;
-            transition: transform 0.1s;
-        }
-
-        .blend-btn:active {
-            box-shadow: 0 2px 0 #d48806;
-            transform: translateY(3px);
-        }
-
-        .blend-btn:disabled {
-            background-color: #ccc;
-            box-shadow: none;
-            cursor: not-allowed;
-        }
-
-        /* Result Section */
         .result-section {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            width: 200px;
-            border-left: 2px dashed #ccc;
-            padding-left: 40px;
-        }
-
-        .result-box {
-            font-size: 100px;
-            color: var(--primary);
-            min-height: 120px;
-            font-weight: bold;
-            transition: all 0.3s ease;
-            padding: 10px;
-            border-radius: 10px;
-        }
-
-        /* Glow for the Result Word */
-        .result-box.glow {
-            text-shadow: 0 0 20px var(--glow-color);
-            transform: scale(1.1);
-        }
-
-        .result-label {
-            font-size: 18px;
-            color: #888;
+            width: 100%;
+            border-left: none;
+            border-top: 2px dashed #ccc; /* Line moves to top */
+            padding-left: 0;
+            padding-top: 20px;
             margin-top: 10px;
         }
 
-    </style>
+        /* Shrink items slightly for smaller screens */
+        .letter-display {
+            width: 80px;
+            height: 100px;
+            font-size: 60px;
+        }
+
+        .control-btn {
+            width: 40px;
+            height: 40px;
+            font-size: 20px;
+        }
+
+        .result-box {
+            font-size: 80px;
+            min-height: 90px;
+        }
+    }
+</style>
 </head>
 <body>
 
